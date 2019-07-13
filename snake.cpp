@@ -4,6 +4,8 @@
 #include <string>
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <deque>
+#include <stdlib.h>
 
 #define SNAKE "\u2588"
 #define BORDER "\u2592\u2592"
@@ -58,6 +60,11 @@ class Grid
         myGrid[x][y] = texture;
     }
 
+    void PlaceFruit(int x, int y)
+    {
+        myGrid[x][y] = "\033[31m\u2588\033[0m";
+    }
+
     int width, height;
 
     private:
@@ -67,6 +74,11 @@ class Grid
 
 class Player
 {
+    struct Point
+    {
+        int x, y;
+    };
+
     public:
 
     Player(Grid &grid)
@@ -77,6 +89,21 @@ class Player
         y = grid.height / 2;
 
         grid.Place(x, y, SNAKE);
+
+        tail = deque<Point>();
+    }
+
+    ~Player()
+    {
+        
+    }
+
+    void Print()
+    {
+        for (int i = 0; i < tail.size(); i++)
+        {
+            grid->Place(tail[i].x, tail[i].y, SNAKE);
+        }
     }
 
     int Move(directions dir)
@@ -129,6 +156,15 @@ class Player
 
     directions cur;
     Grid *grid;
+
+    deque<Point> tail;
+    
+};
+
+struct Fruit
+{
+    int x, y;
+    string texture;
 };
 
 class Controls
@@ -216,6 +252,11 @@ class Game
     void Update()
     {
         directions dir = NONE;
+
+        int x = rand() % grid->width;
+        int y = rand() % grid->height;
+        Fruit fruit = {x, y, SNAKE};
+
         while (!isWin && !isFail)
         {
             printf("\033c");
@@ -229,7 +270,20 @@ class Game
             {
                 isFail = true;
             }
+            
+            if (fruit.x == snake->x && fruit.y == snake->y)
+            {
+                int x = rand() % grid->width;
+                int y = rand() % grid->height;
+                fruit = {x, y, SNAKE};
+                score++;
+            }
+
             grid->Print();
+            snake->Print();
+            //grid->Place(fruit.x, fruit.y, fruit.texture);
+            grid->PlaceFruit(fruit.x, fruit.y);
+            cout << score << endl;
             usleep(1E6 / FPS);
         }
         if (isFail)
