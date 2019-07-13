@@ -42,7 +42,7 @@ class Grid
             printf(BORDER);
             for (int x = 0; x < width; x++)
             {
-                printf("%s%s", myGrid[x][y].c_str(), myGrid[x][y].c_str());
+                printf("\033[32m%s%s\033[0m", myGrid[x][y].c_str(), myGrid[x][y].c_str());
             }
             printf("%s\n", BORDER);
         }
@@ -252,5 +252,6 @@ int main()
     Game game(Width, Height);
     game.Update();
     cout << "Game over\n";
+
     return 0;
 }
