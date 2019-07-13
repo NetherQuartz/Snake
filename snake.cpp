@@ -251,6 +251,6 @@ int main()
 {
     Game game(Width, Height);
     game.Update();
-
+    cout << "Game over\n";
     return 0;
 }
