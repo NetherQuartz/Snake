@@ -15,7 +15,6 @@ using namespace std;
 
 int Width = 20;
 int Height = 20;
-int FPS = 2;
 
 enum directions
 {
@@ -165,28 +164,14 @@ class Player
 
     bool InTail(Point p, int pos = 0)
     {
-        cout << p.x << ' ' << p.y << ' ' << pos << ' ' << tail.size() << endl;
-
         for (int i = pos; i < tail.size(); i++)
         {
-            cout << tail[i].x << endl;
             if (tail[i].x == p.x && tail[i].y == p.y)
             {
-
                 return true;
             }
         }
-
         return false;
-    }
-
-    void show()
-    {
-        cout << "Tail is:\n";
-        for (int i = 0; i < tail.size(); i++)
-        {
-            cout << tail[i].x << ' ' << tail[i].y << endl;
-        }
     }
 
     int x, y;
@@ -224,28 +209,54 @@ class Controls
         if (!kbhit()) return NONE;
 
         int c = getchar();
-        
+        directions ans = NONE;
+
         switch (c) {
             case 'w':
             case 'W':
-            return UP;
+            ans = UP;
             break;
 
             case 'a':
             case 'A':
-            return LEFT;
+            ans = LEFT;
             break;
 
             case 's':
             case 'S':
-            return DOWN;
+            ans = DOWN;
             break;
 
             case 'd':
             case 'D':
-            return RIGHT;
+            ans = RIGHT;
+            break;
+
+            case '\033':
+            getchar();
+            c = getchar();
+            switch (c)
+            {
+                case 'A':
+                ans = UP;
+                break;
+
+                case 'B':
+                ans = DOWN;
+                break;
+
+                case 'C':
+                ans = RIGHT;
+                break;
+
+                case 'D':
+                ans = LEFT;
+                break;
+            }
             break;
         }
+        tcflush(0, TCIFLUSH);
+        return ans;
     }
 
     private:
@@ -268,8 +279,8 @@ class Game
     Game(int width, int height)
     {
         isFail = false;
-        isWin = false;
         score = 0;
+        FPS = 2;
 
         grid = new Grid(width, height);
         snake = new Player(*grid);
@@ -289,7 +300,7 @@ class Game
 
         Point fruit = newFruit();
 
-        while (!isWin && !isFail)
+        while (!isFail)
         {
             printf("\033c");
             directions new_dir = controls->Input();
@@ -305,15 +316,14 @@ class Game
 
             if (snake->InTail({snake->x, snake->y}, 1))
             {
-                cout << snake->InTail({snake->x, snake->y}, 1) << endl;
                 isFail = true;
-                snake->show();
             }
             
             if (fruit.x == snake->x && fruit.y == snake->y)
             {
                 fruit = newFruit();
                 snake->Grow();
+                FPS += 1;
                 score++;
             }
 
@@ -321,12 +331,8 @@ class Game
             grid->PlaceFruit(fruit.x, fruit.y);
             
             grid->Print();
-            cout << score << endl;
+            cout << "Your score: " << score << endl;
             usleep(1E6 / FPS);
-        }
-        if (isFail)
-        {
-            cout << "YOU LOSE!!!\n";
         }
     }
 
@@ -345,7 +351,8 @@ class Game
         return fruit;
     }
 
-    bool isFail, isWin;
+    bool isFail;
+    int FPS;
     int score;
     Grid *grid;
     Player *snake;
@@ -355,10 +362,10 @@ class Game
 int main()
 {
     srand(time(NULL));
-    
+
     Game game(Width, Height);
     game.Update();
-    cout << "Game over\n";
+    cout << "GAME OVER!!!\n";
 
     return 0;
 }
