@@ -88,9 +88,12 @@ class Player
         x = grid.width / 2;
         y = grid.height / 2;
 
+        tail = deque<Point>();
+        tail.push_back({x, y});
+
         grid.Place(x, y, SNAKE);
 
-        tail = deque<Point>();
+        toGrow = false;
     }
 
     ~Player()
@@ -112,48 +115,58 @@ class Player
         {
             case UP:
             if (y - 1 < 0) return false;
-            clear_pos();
-            grid->Place(x, y - 1, SNAKE);
             y--;
             break;
 
             case DOWN:
             if (y + 1 > grid->height - 1) return false;
-            clear_pos();
-            grid->Place(x, y + 1, SNAKE);
             y++;
             break;
 
             case LEFT:
             if (x - 1 < 0) return false;
-            clear_pos();
-            grid->Place(x - 1, y, SNAKE);
             x--;
             break;
 
             case RIGHT:
             if (x + 1 > grid->width - 1) return false;
-            clear_pos();
-            grid->Place(x + 1, y, SNAKE);
             x++;
             break;
         }
+
+        if (dir != NONE)
+        {
+            grid->Place(tail.back().x, tail.back().y, " ");
+            if (!toGrow)
+            {
+                tail.pop_back();
+            }
+            else
+            {
+                toGrow = false;
+            }
+            
+            tail.push_front({x, y});
+        }
+
         if (dir != cur)
         {
             cur = dir;
         }
+
         return true;
+    }
+
+    void Grow()
+    {
+        toGrow = true;
     }
 
     int x, y;
 
     private:
 
-    void clear_pos()
-    {
-        grid->Place(x, y, " ");
-    }
-
+    bool toGrow;
     directions cur;
     Grid *grid;
 
@@ -276,13 +289,14 @@ class Game
                 int x = rand() % grid->width;
                 int y = rand() % grid->height;
                 fruit = {x, y, SNAKE};
+                snake->Grow();
                 score++;
             }
 
-            grid->Print();
             snake->Print();
-            //grid->Place(fruit.x, fruit.y, fruit.texture);
             grid->PlaceFruit(fruit.x, fruit.y);
+            
+            grid->Print();
             cout << score << endl;
             usleep(1E6 / FPS);
         }
