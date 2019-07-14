@@ -6,6 +6,7 @@
 #include <sys/ioctl.h>
 #include <deque>
 #include <stdlib.h>
+#include <ctime>
 
 #define SNAKE "\u2588"
 #define BORDER "\u2592\u2592"
@@ -72,13 +73,13 @@ class Grid
     vector<vector<string>> myGrid;
 };
 
+struct Point
+{
+    int x, y;
+};
+
 class Player
 {
-    struct Point
-    {
-        int x, y;
-    };
-
     public:
 
     Player(Grid &grid)
@@ -162,6 +163,32 @@ class Player
         toGrow = true;
     }
 
+    bool InTail(Point p, int pos = 0)
+    {
+        cout << p.x << ' ' << p.y << ' ' << pos << ' ' << tail.size() << endl;
+
+        for (int i = pos; i < tail.size(); i++)
+        {
+            cout << tail[i].x << endl;
+            if (tail[i].x == p.x && tail[i].y == p.y)
+            {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void show()
+    {
+        cout << "Tail is:\n";
+        for (int i = 0; i < tail.size(); i++)
+        {
+            cout << tail[i].x << ' ' << tail[i].y << endl;
+        }
+    }
+
     int x, y;
 
     private:
@@ -172,12 +199,6 @@ class Player
 
     deque<Point> tail;
     
-};
-
-struct Fruit
-{
-    int x, y;
-    string texture;
 };
 
 class Controls
@@ -266,9 +287,7 @@ class Game
     {
         directions dir = NONE;
 
-        int x = rand() % grid->width;
-        int y = rand() % grid->height;
-        Fruit fruit = {x, y, SNAKE};
+        Point fruit = newFruit();
 
         while (!isWin && !isFail)
         {
@@ -283,12 +302,17 @@ class Game
             {
                 isFail = true;
             }
+
+            if (snake->InTail({snake->x, snake->y}, 1))
+            {
+                cout << snake->InTail({snake->x, snake->y}, 1) << endl;
+                isFail = true;
+                snake->show();
+            }
             
             if (fruit.x == snake->x && fruit.y == snake->y)
             {
-                int x = rand() % grid->width;
-                int y = rand() % grid->height;
-                fruit = {x, y, SNAKE};
+                fruit = newFruit();
                 snake->Grow();
                 score++;
             }
@@ -308,6 +332,19 @@ class Game
 
     private:
 
+    Point newFruit()
+    {
+        Point fruit;
+        do
+        {
+            int x = rand() % grid->width;
+            int y = rand() % grid->height;
+            fruit = {x, y};
+        } while (snake->InTail(fruit));
+        
+        return fruit;
+    }
+
     bool isFail, isWin;
     int score;
     Grid *grid;
@@ -317,6 +354,8 @@ class Game
 
 int main()
 {
+    srand(time(NULL));
+    
     Game game(Width, Height);
     game.Update();
     cout << "Game over\n";
