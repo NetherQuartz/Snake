@@ -11,6 +11,7 @@ Player::Player(Grid &grid)
     tail.push_back({x, y});
 
     grid.Place(x, y, SNAKE);
+    cur = NONE;
 
     toGrow = false;
 }
@@ -25,6 +26,11 @@ void Player::Print()
 
 bool Player::Move(directions dir)
 {
+    // нельзя ползти в обратную сторону
+    if (cur != NONE && (int)dir % 2 == (int)cur % 2)
+    {
+        dir = cur;
+    }
     switch (dir)
     {
         case UP:

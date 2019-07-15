@@ -3,7 +3,7 @@
 
 enum directions
 {
-    UP, DOWN, LEFT, RIGHT, NONE
+    UP, LEFT, DOWN, RIGHT, NONE
 };
 
 struct Point

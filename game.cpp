@@ -35,7 +35,8 @@ void Game::Update()
         {
             dir = new_dir;
         }
-        int movement = snake->Move(dir);
+        
+        bool movement = snake->Move(dir);
         if (!movement)
         {
             isFail = true;
