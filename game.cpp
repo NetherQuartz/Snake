@@ -1,6 +1,7 @@
 #include "game.h"
 
 #include <iostream>
+//#include <string>
 #include <unistd.h>
 
 Game::Game(int width, int height)
@@ -27,9 +28,22 @@ void Game::Update()
 
     Point fruit = newFruit();
 
-    while (!isFail)
+    do
     {
         printf("\033c");
+
+        char buf[50];
+        sprintf(buf, "\033[100;37mYour score: %d\033[0m", score);
+        std::string yourScore = buf;
+        std::cout << yourScore;
+
+        // чтобы влезла надпись your score
+        for (int i = 0; i < grid->width * 2 - yourScore.size() + 17; i++)
+        {
+            std::cout << "\033[100m \033[0m";
+        }
+        std::cout << std::endl;
+
         directions new_dir = controls->Input();
         if (new_dir != NONE)
         {
@@ -59,9 +73,30 @@ void Game::Update()
         grid->PlaceFruit(fruit.x, fruit.y);
         
         grid->Print();
-        std::cout << "Your score: " << score << std::endl;
+
+        if (!isFail)
+        {
+            for (int i = 0; i < grid->width + 2; i++)
+            {
+                std::cout << "\033[100;37m  \033[0m";
+            }
+            std::cout << std::endl;
+        }
+        else
+        {
+            std::string gameOver = "\033[100;37mGAME OVER!!!\033[0m";
+            std::cout << gameOver;
+
+            // чтобы влезла надпись game over
+            for (int i = 0; i < grid->width - 4; i++)
+            {
+                std::cout << "\033[100;37m  \033[0m";
+            }
+            std::cout << std::endl;
+        }
+
         usleep(1E6 / FPS);
-    }
+    } while (!isFail);
 }
 
 Point Game::newFruit()

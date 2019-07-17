@@ -14,7 +14,7 @@ int main()
 
     Game game(Width, Height);
     game.Update();
-    std::cout << "GAME OVER!!!\n";
+    //std::cout << "GAME OVER!!!\n";
 
     return 0;
 }

@@ -1,6 +1,8 @@
 #include "grid.h"
 #include "types.h"
 
+#include <iostream>
+
 Grid::Grid(int width, int height)
 {
     myGrid = std::vector<std::vector<std::string>>(width, std::vector<std::string>(height, " "));
@@ -10,11 +12,11 @@ Grid::Grid(int width, int height)
 
 void Grid::Print()
 {
-    for (int i = 0; i < width + 2; i++)
-    {
-        printf(BORDER);
-    }
-    printf("\n");
+    // for (int i = 0; i < width + 2; i++)
+    // {
+    //     printf(BORDER);
+    // }
+    // printf("\n");
     for (int y = 0; y < height; y++)
     {
         printf(BORDER);
@@ -24,11 +26,11 @@ void Grid::Print()
         }
         printf("%s\n", BORDER);
     }
-    for (int i = 0; i < width + 2; i++)
-    {
-        printf(BORDER);
-    }
-    printf("\n");
+    // for (int i = 0; i < width + 2; i++)
+    // {
+    //     printf(BORDER);
+    // }
+    // printf("\n");
 }
 
 void Grid::Place(int x, int y, std::string texture)
@@ -38,5 +40,5 @@ void Grid::Place(int x, int y, std::string texture)
 
 void Grid::PlaceFruit(int x, int y)
 {
-    myGrid[x][y] = "\033[31m\u2588\033[0m";
+    myGrid[x][y] = "\033[41m \033[0m";
 }
