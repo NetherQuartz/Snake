@@ -11,6 +11,11 @@ struct Point
     int x, y;
 };
 
+enum menu
+{
+    HELP, OPTIONS, EXIT, DEFAULT
+};
+
 #define SNAKE "\033[42m \033[0m"
 #define BORDER "\033[100m  \033[0m"
 

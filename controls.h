@@ -15,6 +15,8 @@ class Controls
 
     directions Input();
 
+    menu todo;
+
     private:
 
     bool kbhit();

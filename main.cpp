@@ -12,9 +12,23 @@ int main()
 {
     srand(time(NULL));
 
-    Game game(Width, Height);
-    game.Update();
-    //std::cout << "GAME OVER!!!\n";
+    Game *game = new Game(Width, Height);
+
+    while (true)
+    {
+        game->Update();
+        if (!game->toClose)
+        {
+            std::cout << "Press any key to continue...\n";
+            getchar();
+            delete game;
+            game = new Game(Width, Height);
+        }
+        else
+        {
+            break;
+        }   
+    }
 
     return 0;
 }

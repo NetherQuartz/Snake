@@ -12,25 +12,15 @@ Grid::Grid(int width, int height)
 
 void Grid::Print()
 {
-    // for (int i = 0; i < width + 2; i++)
-    // {
-    //     printf(BORDER);
-    // }
-    // printf("\n");
     for (int y = 0; y < height; y++)
     {
-        printf(BORDER);
+        std::cout << BORDER;
         for (int x = 0; x < width; x++)
         {
-            printf("\033[32m%s%s\033[0m", myGrid[x][y].c_str(), myGrid[x][y].c_str());
+            std::cout << "\033[32m" << myGrid[x][y] << myGrid[x][y] << "\033[0m";
         }
-        printf("%s\n", BORDER);
+        std::cout << BORDER << std::endl;
     }
-    // for (int i = 0; i < width + 2; i++)
-    // {
-    //     printf(BORDER);
-    // }
-    // printf("\n");
 }
 
 void Grid::Place(int x, int y, std::string texture)

@@ -16,6 +16,8 @@ class Game
 
     void Update();
 
+    bool toClose;
+
     private:
 
     Point newFruit();
@@ -23,6 +25,10 @@ class Game
     bool isFail;
     int FPS;
     int score;
+
+    int width;
+    int height;
+
     Grid *grid;
     Player *snake;
     Controls *controls;

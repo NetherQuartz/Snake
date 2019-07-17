@@ -10,6 +10,8 @@ Controls::Controls()
     new_tio=old_tio;
     new_tio.c_lflag &= (~ICANON & ~ECHO);
     tcsetattr(STDIN_FILENO,TCSANOW,&new_tio);
+
+    todo = DEFAULT;
 }
 
 Controls::~Controls()
@@ -22,8 +24,9 @@ directions Controls::Input()
 {
     if (!kbhit()) return NONE;
 
-    int c = getchar();
+    char c = getchar();
     directions ans = NONE;
+    todo = DEFAULT;
 
     switch (c) {
         case 'w':
@@ -47,6 +50,32 @@ directions Controls::Input()
         break;
 
         case '\033':
+
+        // если нажата просто esc
+        if (!kbhit())
+        {
+            tcsetattr(STDIN_FILENO,TCSANOW,&old_tio);
+            std::cout << "EXIT: Are you sure? (y/n) ";
+            char c = getchar();
+
+            switch (c)
+            {
+                case 'y':
+                case 'Y':
+                todo = EXIT;
+                break;
+
+                default:
+                tcsetattr(STDIN_FILENO,TCSANOW,&new_tio);
+                todo = DEFAULT;
+                break;
+            }
+            getchar();
+            printf("\033c");
+            break;
+        }
+
+        // если esc-последовательность
         getchar();
         c = getchar();
         switch (c)
@@ -67,6 +96,11 @@ directions Controls::Input()
             ans = LEFT;
             break;
         }
+        break;
+
+        case 'h':
+        case 'H':
+        todo = HELP;
         break;
     }
     tcflush(0, TCIFLUSH);

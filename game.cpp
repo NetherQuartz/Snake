@@ -1,7 +1,6 @@
 #include "game.h"
 
 #include <iostream>
-//#include <string>
 #include <unistd.h>
 
 Game::Game(int width, int height)
@@ -9,6 +8,10 @@ Game::Game(int width, int height)
     isFail = false;
     score = 0;
     FPS = 2;
+    this->width = width;
+    this->height = height;
+
+    toClose = false;
 
     grid = new Grid(width, height);
     snake = new Player(*grid);
@@ -24,13 +27,35 @@ Game::~Game()
 
 void Game::Update()
 {
+    std::string options = "H-help ESC-exit";
+
     directions dir = NONE;
 
     Point fruit = newFruit();
 
     do
     {
+        // очистка терминала
         printf("\033c");
+
+        directions new_dir = controls->Input();
+        switch (controls->todo)
+        {
+            case EXIT:
+            toClose = true;
+            return;
+            break;
+
+            case HELP:
+            std::string helpMsg = "Use WASD or arrows to control the snake. Eat fruits to grow and increase your score. You also can't move backwards. If you bite your tail or bump into a wall, you lose.\n\nWritten by NetherQuartz, follow me on Github: https://github.com/NetherQuartz.";
+
+            std::cout << helpMsg << std::endl;
+            std::cout << "Press any key to continue...\n";
+            getchar();
+            printf("\033c");
+            controls->todo = DEFAULT;
+            break;
+        }
 
         char buf[50];
         sprintf(buf, "\033[100;37mYour score: %d\033[0m", score);
@@ -44,7 +69,6 @@ void Game::Update()
         }
         std::cout << std::endl;
 
-        directions new_dir = controls->Input();
         if (new_dir != NONE)
         {
             dir = new_dir;
@@ -76,26 +100,27 @@ void Game::Update()
 
         if (!isFail)
         {
-            for (int i = 0; i < grid->width + 2; i++)
+            // чтобы влезла надпись options
+            for (int i = 0; i < grid->width * 2 - options.size() + 4; i++)
             {
-                std::cout << "\033[100;37m  \033[0m";
+                std::cout << "\033[100;37m \033[0m";
             }
-            std::cout << std::endl;
+            std::cout << "\033[100;37m" << options << "\033[0m" << std::endl;
         }
         else
         {
             std::string gameOver = "\033[100;37mGAME OVER!!!\033[0m";
             std::cout << gameOver;
 
-            // чтобы влезла надпись game over
-            for (int i = 0; i < grid->width - 4; i++)
+            // чтобы влезли надписи game over и options
+            for (int i = 0; i < grid->width * 2 - 8 - options.size(); i++)
             {
-                std::cout << "\033[100;37m  \033[0m";
+                std::cout << "\033[100;37m \033[0m";
             }
-            std::cout << std::endl;
+            std::cout << "\033[100;37m" << options << "\033[0m" << std::endl;
         }
-
         usleep(1E6 / FPS);
+        
     } while (!isFail);
 }
 
