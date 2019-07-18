@@ -16,6 +16,7 @@ namespace Save
 
     int readHighScore(std::string);
     void writeHighScore(std::string, int);
+    record *readHighScore();
     std::vector<record> listScores();
 };
 

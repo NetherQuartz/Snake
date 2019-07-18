@@ -15,6 +15,10 @@ class Controls
 
     directions Input();
 
+    void EchoOn();
+    void EchoOff();
+    void BufferOff();
+
     menu todo;
 
     private:

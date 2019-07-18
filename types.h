@@ -13,7 +13,7 @@ struct Point
 
 enum menu
 {
-    HELP, OPTIONS, EXIT, DEFAULT
+    HELP, CHUSER, LEADERS, EXIT, DEFAULT
 };
 
 #define SNAKE "\033[42m \033[0m"

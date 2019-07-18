@@ -54,7 +54,7 @@ directions Controls::Input()
         // если нажата просто esc
         if (!kbhit())
         {
-            tcsetattr(STDIN_FILENO,TCSANOW,&old_tio);
+            BufferOff();
             std::cout << "EXIT: Are you sure? (y/n) ";
             char c = getchar();
 
@@ -70,7 +70,6 @@ directions Controls::Input()
                 todo = DEFAULT;
                 break;
             }
-            getchar();
             printf("\033c");
             break;
         }
@@ -102,6 +101,16 @@ directions Controls::Input()
         case 'H':
         todo = HELP;
         break;
+
+        case 'n':
+        case 'N':
+        todo = CHUSER;
+        break;
+
+        case 'l':
+        case 'L':
+        todo = LEADERS;
+        break;
     }
     tcflush(0, TCIFLUSH);
     return ans;
@@ -112,4 +121,24 @@ bool Controls::kbhit()
     int byteswaiting;
     ioctl(0, FIONREAD, &byteswaiting);
     return byteswaiting > 0;
+}
+
+void Controls::EchoOn()
+{
+    tcsetattr(STDIN_FILENO,TCSANOW,&old_tio);
+    tcflush(0, TCIFLUSH);
+}
+
+void Controls::EchoOff()
+{
+    tcsetattr(STDIN_FILENO,TCSANOW,&new_tio);
+    tcflush(0, TCIFLUSH);
+}
+
+void Controls::BufferOff()
+{
+    auto cur_tio = old_tio;
+    cur_tio.c_lflag &= (~ICANON);
+    tcsetattr(STDIN_FILENO,TCSANOW,&cur_tio);
+    tcflush(0, TCIFLUSH);
 }

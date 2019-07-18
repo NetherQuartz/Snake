@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <algorithm>
+#include <unistd.h>
 
 int Save::readHighScore(std::string username)
 {
@@ -13,6 +14,30 @@ int Save::readHighScore(std::string username)
         } 
     }
     return 0;
+}
+
+Save::record *Save::readHighScore()
+{
+    std::ifstream in;
+    in.open("snake.save", std::ios::binary);
+
+    int score, size;
+    std::string username;
+    record *rec = new record;
+    if (in.read((char *)&score, sizeof(score)))
+    {
+        in.read((char *)&size, sizeof(size));
+        username.resize(size);
+        in.read((char *)&username[0], size);
+        *rec = {username, score};
+    }
+    else
+    {
+        *rec = {"", 0};
+    }
+    in.close();
+
+    return rec;
 }
 
 void Save::writeHighScore(std::string username, int score)

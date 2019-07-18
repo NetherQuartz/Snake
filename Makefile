@@ -14,7 +14,7 @@ main.cpp: main.h game.h save.h
 
 grid.cpp: grid.h types.h
 
-game.cpp: game.h
+game.cpp: game.h save.h
 
 controls.cpp: controls.h
 
@@ -26,4 +26,4 @@ save.cpp: save.h
 	$(CC) $(CCFLAGS) -c $< -o $@
 
 clean:
-	rm -f *o snake
+	rm -f *.o snake *.save

@@ -18,6 +18,8 @@ class Game
 
     bool toClose;
 
+    std::string username;
+
     private:
 
     Point newFruit();
@@ -25,6 +27,9 @@ class Game
     bool isFail;
     int FPS;
     int score;
+    int high;
+
+    std::string highName;
 
     int width;
     int height;

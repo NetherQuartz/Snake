@@ -10,14 +10,24 @@
 int Width = 30;
 int Height = 30;
 
+std::string UserName;
+
 int main()
 {
     srand(time(NULL));
+    UserName = "";
 
     while (true)
     {
         Game *game = new Game(Width, Height);
+        if (UserName != "")
+        {
+            game->username = UserName;
+        }
+        
         game->Update();
+
+        UserName = game->username;
         if (!game->toClose)
         {
             std::cout << "Press SPACE to continue...\n";
