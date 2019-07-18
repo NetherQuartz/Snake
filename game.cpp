@@ -50,10 +50,11 @@ void Game::Update()
             std::string helpMsg = "Use WASD or arrows to control the snake. Eat fruits to grow and increase your score. You also can't move backwards. If you bite your tail or bump into a wall, you lose.\n\nWritten by NetherQuartz, follow me on Github: https://github.com/NetherQuartz.";
 
             std::cout << helpMsg << std::endl;
-            std::cout << "Press any key to continue...\n";
-            getchar();
+            std::cout << "\nPress SPACE to continue...\n";
+            while (char c = getchar() != ' ');
             printf("\033c");
             controls->todo = DEFAULT;
+            
             break;
         }
 
@@ -120,7 +121,7 @@ void Game::Update()
             std::cout << "\033[100;37m" << options << "\033[0m" << std::endl;
         }
         usleep(1E6 / FPS);
-        
+
     } while (!isFail);
 }
 

@@ -1,6 +1,8 @@
 #include "main.h"
 #include "game.h"
 
+#include "save.h"
+
 #include <iostream>
 #include <stdlib.h>
 #include <ctime>
@@ -12,20 +14,19 @@ int main()
 {
     srand(time(NULL));
 
-    Game *game = new Game(Width, Height);
-
     while (true)
     {
+        Game *game = new Game(Width, Height);
         game->Update();
         if (!game->toClose)
         {
-            std::cout << "Press any key to continue...\n";
-            getchar();
+            std::cout << "Press SPACE to continue...\n";
+            while (char c = getchar() != ' ');
             delete game;
-            game = new Game(Width, Height);
         }
         else
         {
+            delete game;
             break;
         }   
     }
