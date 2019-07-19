@@ -8,7 +8,7 @@ OBJ = main.o grid.o game.o controls.o player.o save.o
 .SUFFIXES = .cpp .o
 
 snake: $(OBJ)
-	$(LD) $(LDFLAGS) -o snake $(OBJ)
+	$(LD) $(LDFLAGS) -o snake $(OBJ) -std=c++17
 
 main.cpp: main.h game.h save.h
 
@@ -23,7 +23,7 @@ player.cpp: player.h
 save.cpp: save.h
 
 .cpp.o:
-	$(CC) $(CCFLAGS) -c $< -o $@
+	$(CC) $(CCFLAGS) -c $< -o $@ -std=c++17
 
 clean:
 	rm -f *.o snake *.save
