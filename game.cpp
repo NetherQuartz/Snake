@@ -36,7 +36,7 @@ Game::~Game()
 
 void Game::Update()
 {
-    std::string options = "| H-help | L-leaders | N-new name | ESC-exit";
+    std::string options = "| H-help | L-leaders | N-new name | C-close";
 
     directions dir = NONE;
 

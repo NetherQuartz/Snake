@@ -51,28 +51,29 @@ directions Controls::Input()
 
         case '\033':
 
+        // Doesn't work, pls help me to fix this // Помоги пофиксить, если знаешь как
         // если нажата просто esc
-        if (!kbhit())
-        {
-            BufferOff();
-            std::cout << "EXIT: Are you sure? (y/n) ";
-            char c = getchar();
+        // if (!kbhit())
+        // {
+        //     BufferOff();
+        //     std::cout << "EXIT: Are you sure? (y/n) ";
+        //     char c = getchar();
 
-            switch (c)
-            {
-                case 'y':
-                case 'Y':
-                todo = EXIT;
-                break;
+        //     switch (c)
+        //     {
+        //         case 'y':
+        //         case 'Y':
+        //         todo = EXIT;
+        //         break;
 
-                default:
-                tcsetattr(STDIN_FILENO,TCSANOW,&new_tio);
-                todo = DEFAULT;
-                break;
-            }
-            printf("\033c");
-            break;
-        }
+        //         default:
+        //         tcsetattr(STDIN_FILENO,TCSANOW,&new_tio);
+        //         todo = DEFAULT;
+        //         break;
+        //     }
+        //     printf("\033c");
+        //     break;
+        // }
 
         // если esc-последовательность
         getchar();
@@ -96,6 +97,29 @@ directions Controls::Input()
             break;
         }
         break;
+
+        case 'c':
+        case 'C':
+        {
+            BufferOff();
+            std::cout << "EXIT: Are you sure? (y/n) ";
+            char c = getchar();
+
+            switch (c)
+            {
+                case 'y':
+                case 'Y':
+                todo = EXIT;
+                break;
+
+                default:
+                tcsetattr(STDIN_FILENO,TCSANOW,&new_tio);
+                todo = DEFAULT;
+                break;
+            }
+            printf("\033c");
+            break;
+        }
 
         case 'h':
         case 'H':

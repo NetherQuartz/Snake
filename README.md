@@ -2,7 +2,7 @@
 My wonderful Snake game
 
 # How to install
-## On Debian (Ubuntu, Linux Mint, etc.):
+## On Debian (Ubuntu, Linux Mint, etc.)
 ```
 sudo apt install gcc
 sudo apt install g++
