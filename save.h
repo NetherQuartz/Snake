@@ -18,6 +18,7 @@ namespace Save
     void writeHighScore(std::string, int);
     record *readHighScore();
     std::vector<record> listScores();
+    bool comp(const Save::record &lhs, const Save::record &rhs);
 };
 
 #endif

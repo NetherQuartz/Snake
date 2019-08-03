@@ -64,7 +64,7 @@ void Save::writeHighScore(std::string username, int score)
     {
         records.push_back({username, score});
     }
-    std::sort(records.begin(), records.end());
+    std::sort(records.begin(), records.end(), comp);
 
     std::ofstream out;
     out.open("snake.save", std::ios::binary);
@@ -101,4 +101,9 @@ std::vector<Save::record> Save::listScores()
 bool Save::record::operator<(const record other)
 {
     return this->score > other.score;
+}
+
+bool Save::comp(const Save::record &lhs, const Save::record &rhs)
+{
+    return lhs.score > rhs.score;
 }
