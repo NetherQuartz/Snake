@@ -2,8 +2,8 @@
 
 CC = g++
 LD = g++
-CCFLAGS =
-LDFLAGS =
+CCFLAGS = -w
+LDFLAGS = -w
 OBJ = main.o grid.o game.o controls.o player.o save.o
 .SUFFIXES = .cpp .o
 
